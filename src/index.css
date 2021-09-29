@@ -1,0 +1,45 @@
+.container {
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-around;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.relative {
+    position: relative;
+}
+
+.main-content {
+    flex: 3;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(20rem, max-content));
+	grid-gap: 1em;
+	justify-content: center;
+	padding: initial;
+	min-height: 75vh;
+}
+
+.filters {
+    flex: 1;
+}
