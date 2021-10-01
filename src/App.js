@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
+import Filters from './components/Filters'
 import NavBar from './components/NavBar'
+import ProductsList from './components/ProductsList'
 
 const baseURL = "http://test-api.edfa3ly.io"
 const defaultInitialData = { products: [], categories: [], }
 
 const App = () => {
 	const [initialData, setInitialData] = useState(defaultInitialData)
+	const [category, setCategory] = useState(0)
+	const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 })
+	const [colors, setColors] = useState([])
 
 	useEffect(() => {
 		(async() => {
@@ -23,13 +28,13 @@ const App = () => {
 	}, [])
 
 	return (
-		<div className="container">
+		<div className="center col pad-1">
 			<h1>Our Ecommerce Store</h1>
-			<h4>Choose one of our categories from below</h4>
-			<NavBar navItems={initialData.categories} />
+			<h3>Choose one of our categories from below</h3>
+			<NavBar navItems={initialData.categories} selected={category} setSelected={setCategory} />
 			<div className="row">
-				<aside className="col filters"></aside>
-				<main className="main-content"></main>
+				<Filters priceRange={priceRange} setPriceRange={setPriceRange} colors={colors} setColors={setColors} />
+				<ProductsList />
 			</div>
 		</div>
 	)
