@@ -78,3 +78,11 @@ h3 {
 .rounded {
     border-radius: 1em;
 }
+
+.hoverable {
+    opacity: 0.6;
+}
+
+.hoverable:hover {
+    opacity: 1;
+}

@@ -1,19 +1,35 @@
-import { Fragment } from 'react'
+import { useState } from 'react'
 import InputRange from 'react-input-range'
+import Rating from './Rating'
 
-const colors = ["Black", "Red", "Blue", "Yellow", "Green", "Orange"]
+const Filters = ({ priceRange, setPriceRange, colors, setColors, ratingFilter, setRatingFilter, priceLimits }) => {
+	const [searchColor, setSearchColor] = useState("")
 
-const Filters = ({ priceRange, setPriceRange }) => {
-	const handleChange = (event) => {
-		if (event.target.id === "min-input") {
-			setPriceRange(current => ({ ...current, min: parseInt(event.target.value) }))
+	const handleChange = ({ target }) => {
+		if (target.id === "min-input") {
+			setPriceRange(current => ({ ...current, min: parseInt(target.value) }))
 		}
-		else if (event.target.id === "max-input") {
-			setPriceRange(current => ({ ...current, max: parseInt(event.target.value) }))
+		else if (target.id === "max-input") {
+			setPriceRange(current => ({ ...current, max: parseInt(target.value) }))
 		}
 	}
+
+	const handleSelectColor = ({ target }) => {
+		setColors(current => ({ ...current, [target.value]: !current[target.value] }))
+	}
+
+	const resetColors = (event) => {
+		event.preventDefault()
+		setColors((current) => (
+			Object.fromEntries(
+				Object.keys(current).map(color => [color, false])
+			)
+		))
+	}
+
 	return (
-		<aside className="col filters pad-1 rounded" style={{ border: "3px solid red", }}>
+		<aside className="col filters pad-1 rounded" style={{ border: "3px solid red", position: "relative", }}>
+			<h3 style={{ position: "absolute", left: 10, top: -18, backgroundColor: "white", padding: 5 }}>Filters</h3>
 			<section className="col filter-section">
 				<h3>Price range</h3>
 				<div className="stretched-row pad-sm">
@@ -27,26 +43,51 @@ const Filters = ({ priceRange, setPriceRange }) => {
 					</div>
 
 				</div>
-				<InputRange minValue={0} maxValue={3000} value={priceRange} onChange={setPriceRange} />
+				<InputRange minValue={priceLimits.min} maxValue={priceLimits.max} value={priceRange} onChange={setPriceRange} />
 			</section>
 
 			<section className="col filter-section">
 				<h3>Color</h3>
-				<form className="stretched-row">
-					{
-						colors.map((color) => (
-							<div key={color} style={{ textAlign: "left" }}>
-								<input className="clickable" type="checkbox" id={"color-" + color} name={"color-" + color} value={color} />
-								<label className="clickable" htmlFor={"color-" + color}>{color}</label>
-							</div>
-						))
-					}
-					<input className="clickable" type="reset" value="X Clear" />
+				<form className="col">
+					<input type="search" value={searchColor} onChange={e => setSearchColor(e.target.value)} placeholder="Enter color" />
+					<div className="col" style={{ maxHeight: "10rem", overflowY: "auto", margin: 0, }}>
+						{
+							Object.entries(colors).filter(([color]) => !searchColor || color.toLowerCase().includes(searchColor))
+							.map(([color, checked]) => (
+								<div key={color} style={{ textAlign: "left" }}>
+									<input
+										type="checkbox"
+										className="clickable"
+										id={"color-" + color}
+										name={"color-" + color}
+										value={color}
+										onChange={handleSelectColor}
+										checked={checked}
+									/>
+									<label className="clickable" htmlFor={"color-" + color}>{color}</label>
+								</div>
+							))
+						}
+					</div>
+					<div className="clickable hoverable" onClick={resetColors} style={{ alignSelf: "flex-start", fontWeight: 900, }}>
+						<span style={{ fontFamily: "sans-serif", margin: 5, }}>X</span>
+						<span style={{ fontSize: "115%" }}>Clear</span>
+					</div>
 				</form>
 			</section>
 
 			<section className="col filter-section">
-			<h3>Average rating</h3>
+				<h3>Average rating</h3>
+				{
+					[5, 4, 3, 2, 1].map((rating) => (
+						<Rating
+							key={rating}
+							rating={rating} 
+							handleClick={() => setRatingFilter(rating)}
+							style={{ border: ratingFilter === rating ? "1px solid red" : "none" }}
+						/>
+					))
+				}
 			</section>
 		</aside>
 	)
