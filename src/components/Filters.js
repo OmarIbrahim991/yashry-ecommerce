@@ -28,10 +28,10 @@ const Filters = ({ priceRange, setPriceRange, colors, setColors, ratingFilter, s
 	}
 
 	return (
-		<aside className="col filters pad-1 rounded" style={{ border: "3px solid red", position: "relative", }}>
-			<h3 style={{ position: "absolute", left: 10, top: -18, backgroundColor: "white", padding: 5 }}>Filters</h3>
+		<fieldset className="col filters pad-1 rounded" style={{ border: "3px solid red", position: "relative", }}>
+			<legend style={{ textAlign: "left", fontSize: "115%", fontWeight: 700, }}>Filters</legend>
 			<section className="col filter-section">
-				<h3>Price range</h3>
+				<h3 className="left">Price range</h3>
 				<div className="stretched-row pad-sm">
 					<div className="row pad-sm">
 						<label htmlFor="min-input">From</label>
@@ -47,14 +47,21 @@ const Filters = ({ priceRange, setPriceRange, colors, setColors, ratingFilter, s
 			</section>
 
 			<section className="col filter-section">
-				<h3>Color</h3>
+				<h3 className="left">Color</h3>
 				<form className="col">
-					<input type="search" value={searchColor} onChange={e => setSearchColor(e.target.value)} placeholder="Enter color" />
+					<input
+						type="search"
+						value={searchColor}
+						onChange={e => setSearchColor(e.target.value)}
+						placeholder="Enter color"
+						style={{ padding: "0.5em", fontSize: "90%" }}
+					/>
+
 					<div className="col" style={{ maxHeight: "10rem", overflowY: "auto", margin: 0, }}>
 						{
 							Object.entries(colors).filter(([color]) => !searchColor || color.toLowerCase().includes(searchColor))
 							.map(([color, checked]) => (
-								<div key={color} style={{ textAlign: "left" }}>
+								<div key={color} className="left">
 									<input
 										type="checkbox"
 										className="clickable"
@@ -69,6 +76,7 @@ const Filters = ({ priceRange, setPriceRange, colors, setColors, ratingFilter, s
 							))
 						}
 					</div>
+
 					<div className="clickable hoverable" onClick={resetColors} style={{ alignSelf: "flex-start", fontWeight: 900, }}>
 						<span style={{ fontFamily: "sans-serif", margin: 5, }}>X</span>
 						<span style={{ fontSize: "115%" }}>Clear</span>
@@ -77,7 +85,7 @@ const Filters = ({ priceRange, setPriceRange, colors, setColors, ratingFilter, s
 			</section>
 
 			<section className="col filter-section">
-				<h3>Average rating</h3>
+				<h3 className="left">Average rating</h3>
 				{
 					[5, 4, 3, 2, 1].map((rating) => (
 						<Rating
@@ -89,7 +97,7 @@ const Filters = ({ priceRange, setPriceRange, colors, setColors, ratingFilter, s
 					))
 				}
 			</section>
-		</aside>
+		</fieldset>
 	)
 }
 
